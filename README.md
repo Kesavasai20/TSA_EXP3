@@ -55,6 +55,7 @@ plt.legend()
 plt.grid(True)
 plt.show()
 ```
+
 ### OUTPUT:
 <img width="1285" height="638" alt="image" src="https://github.com/user-attachments/assets/41653813-800a-4c28-911a-3e039bee2f0b" />
 
