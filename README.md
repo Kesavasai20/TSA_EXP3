@@ -1,6 +1,7 @@
 # Ex.No: 03   COMPUTE THE AUTO FUNCTION(ACF)
-Date: 
-
+# Date: 2/9/2025
+## Name: K KESAVA SAI
+## Register Number: 212223230105
 ### AIM:
 To Compute the AutoCorrelation Function (ACF) of the data for the first 35 lags to determine the model
 type to fit the data.
@@ -11,33 +12,52 @@ type to fit the data.
 4. Store the results in an array
 5. Represent the result in graphical representation as given below.
 ### PROGRAM:
+```py
 import matplotlib.pyplot as plt
-
 import numpy as np
+import pandas as pd
+price=pd.read_csv("Clean_Dataset.csv")
 
-data = [3, 16, 156, 47, 246, 176, 233, 140, 130,
-101, 166, 201, 200, 116, 118, 247,
-209, 52, 153, 232, 128, 27, 192, 168, 208,
-187, 228, 86, 30, 151, 18, 254,
-76, 112, 67, 244, 179, 150, 89, 49, 83, 147, 90,
-33, 6, 158, 80, 35, 186, 127]
+N=len(price)
 
+## Define lags
 lags = range(35)
 
+## Pre-allocate autocorrelation table
+autocorr_values = []
 
-#Pre-allocate autocorrelation table
+numeric_data = data.select_dtypes(include=np.number)
+mean_data = numeric_data.mean()
+variance_data = numeric_data.var()
 
-#Mean
+## Normalize the data
+normalized_data = (numeric_data - mean_data) / np.sqrt(variance_data)
 
-#Variance
+## Go through lag components one-by-one
+for col in numeric_data.columns:
+    autocorr_values_col = []
+    for lag in lags:
+        if lag == 0:
+            autocorr_values_col.append(1)  # Autocorrelation at lag 0 is always 1
+        else:
+            auto_cov = np.sum((numeric_data[col][:-lag] - mean_data[col]) * (numeric_data[col][lag:] - mean_data[col])) / N
+            autocorr_values_col.append(auto_cov / variance_data[col])  # Normalize by variance
+    autocorr_values.append(autocorr_values_col)
 
-#Normalized data
-
-#Go through lag components one-by-one
-
-#display the graph
-
+## Display the graph
+plt.figure(figsize=(10, 6))
+for i, col in enumerate(numeric_data.columns):
+    plt.stem(lags, autocorr_values[i], label=col)
+plt.title('Autocorrelation of Data')
+plt.xlabel('Lag')
+plt.ylabel('Autocorrelation')
+plt.legend()
+plt.grid(True)
+plt.show()
+```
 ### OUTPUT:
+<img width="1285" height="638" alt="image" src="https://github.com/user-attachments/assets/41653813-800a-4c28-911a-3e039bee2f0b" />
+
 
 ### RESULT:
         Thus we have successfully implemented the auto correlation function in python.
